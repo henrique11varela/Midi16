@@ -37,8 +37,14 @@ const char binary[16][4] = {{0, 0, 0, 0},
                             {1, 1, 1, 1}};
 
 //Variables
+int menu = 0;
+int oldSwitchState = 0;
 bool oldButtonState[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+int midiChannel = 0;
+int rootNote = 0;
+int noteIndex = 3;
 
+//Functions
 void controlChange(byte channel, byte control, byte value)
 {
   midiEventPacket_t event = {0x0B, 0xB0 | channel, control, value};
@@ -55,6 +61,22 @@ void noteOff(byte channel, byte pitch, byte velocity)
   MidiUSB.sendMIDI(noteOff);
 }
 
+int SwitchState()
+{
+  if (digitalRead(left) == LOW)
+  {
+    return 1;
+  }
+  else if (digitalRead(right) == LOW)
+  {
+    return 2;
+  }
+  else
+  {
+    return 0;
+  }
+}
+
 bool ButtonIsPressed(int i)
 {
   for (int j = 0; j < 4; j++)
@@ -68,33 +90,147 @@ void PlayMode()
 {
   for (int i = 0; i < 16; i++)
   {
-    if (ButtonIsPressed(i) != oldButtonState[i]{
+    if (ButtonIsPressed(i) != oldButtonState[i])
+    {
       if (ButtonIsPressed(i))
       {
-        noteOn(0, i + 36, 127);
-        Serial.print("Play: ");
-        Serial.print("ch");
-        Serial.print(" ");
+        noteOn(midiChannel, noteIndex * 12 + rootNote + i, 127);
+        Serial.print("Play: ch ");
+        Serial.print(midiChannel);
+        Serial.print(" i ");
         Serial.print(i);
-        Serial.print(" ");
-        Serial.println("vel");
+        Serial.print(" rt ");
+        Serial.print(rootNote);
+        Serial.print(" vel ");
+        Serial.print("vel");
+        Serial.print(" index ");
+        Serial.println(noteIndex);
         MidiUSB.flush();
+        delay(2);
       }
       else
       {
-        noteOff(0, i + 36, 0);
-        Serial.print("Stop: ");
-        Serial.print("ch");
-        Serial.print(" ");
+        noteOff(midiChannel, noteIndex * 12 + rootNote + i, 0);
+        Serial.print("Stop: ch ");
+        Serial.print(midiChannel);
+        Serial.print(" i ");
         Serial.print(i);
-        Serial.print(" ");
-        Serial.println("vel");
+        Serial.print(" rt ");
+        Serial.print(rootNote);
+        Serial.print(" vel ");
+        Serial.print("vel");
+        Serial.print(" index ");
+        Serial.println(noteIndex);
         MidiUSB.flush();
+        delay(2);
       }
       oldButtonState[i] = ButtonIsPressed(i);
     }
   }
 }
+
+void MidiChannelMode()
+{
+  for (int i = 0; i < 16; i++)
+  {
+    if (ButtonIsPressed(i))
+    {
+      midiChannel = i;
+    }
+  }
+}
+
+void TranscribeMode()
+{
+
+  for (int i = 0; i < 16; i++)
+  {
+    if (ButtonIsPressed(i) != oldButtonState[i])
+    {
+      //Root Note Incrementer
+      if (ButtonIsPressed(12))
+      {
+        if (rootNote > 0)
+        {
+          rootNote--;
+        }
+        else if (noteIndex > 0)
+        {
+          rootNote = 11;
+          noteIndex--;
+        }
+      }
+      else if (ButtonIsPressed(13))
+      {
+        if (rootNote < 11)
+        {
+          rootNote++;
+        }
+        else if (noteIndex < 7)
+        {
+          rootNote = 0;
+          noteIndex++;
+        }
+      }
+      //Octave change
+      else if (ButtonIsPressed(14) && noteIndex > 0)
+      {
+        noteIndex--;
+      }
+
+      else if (ButtonIsPressed(15) && noteIndex < 7)
+      {
+        noteIndex++;
+      }
+      //Root Note Changer
+      else
+      {
+        rootNote = i;
+      }
+      oldButtonState[i] = ButtonIsPressed(i);
+    }
+  }
+}
+
+void DebugMode()
+{
+  for (int i = 0; i < 16; i++)
+  {
+    Serial.print(ButtonIsPressed(i));
+    Serial.print(" ");
+  }
+  Serial.println("");
+}
+
+void MainMenu()
+{
+  if (SwitchState() != oldSwitchState)
+  {
+    //Left
+    if (SwitchState() == 1)
+    {
+      if (menu > 0)
+      {
+        menu--;
+      }
+    }
+    //Right
+    else if (SwitchState() == 2)
+    {
+      if (menu < 2)
+      {
+        menu++;
+      }
+    }
+    oldSwitchState = SwitchState();
+  }
+
+  if (menu == 0) DebugMode();
+  else if (menu == 1) TranscribeMode();
+  else if (menu == 2) MidiChannelMode();
+}
+
+//Main
 
 void setup()
 {
@@ -112,5 +248,12 @@ void setup()
 
 void loop()
 {
-  PlayMode();
+  if (digitalRead(side) == HIGH)
+  {
+    PlayMode();
+  }
+  else
+  {
+    MainMenu();
+  }
 }
