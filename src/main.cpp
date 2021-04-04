@@ -188,6 +188,7 @@ void TranscribeMode()
         rootNote = i;
       }
       oldButtonState[i] = ButtonIsPressed(i);
+      delay(2);
     }
   }
 }

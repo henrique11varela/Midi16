@@ -1,54 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Midi16</title>
 </head>
+
 <body>
-    
 
-<div class="main">
-    <div class="container">
-        <h1>Midi16</h1>
-
-        <p>The Midi16 is a midi fighter inspired controller that I built after I got jump scared by the original controller’s price.
-            Material used in the project: 16 face arcade buttons, a side toggle button (from an old car radio), a front facing 2way temporary switch, a 3.5mm mono jack to use as a pedal input, a 128x64px monocolored OLED display (SSD1306), acrylic panels, some standoffs and screws, a USB type B to micro USB converter cable, an arduino pro micro, and a 16 channel multiplexer.</p>
-
-            <h3>Links between boards/pieces:</h3>
-            <ul>
-                <li>16ch mtpx S0 - pin 15</li>
-                <li>16ch mtpx S1 - pin 14</li>
-                <li>16ch mtpx S2 - pin 16</li>
-                <li>16ch mtpx S3 - pin 10</li>
-                <li>16ch mtpx Sig - pin 9</li>
-                <li>Screen SCK - pin 3</li>
-                <li>Screen SDA - pin 2</li>
-                <li>Switch left - pin 4</li>
-                <li>Switch right - pin 5</li>
-                <li>Toggle button - pin 8</li>
-                <li>Jack - pin 18</li>
-            </ul>
-
-            <p>The face buttons connect to the multiplexer in the following manner:<br>
-                0 1 2 3<br>
-                4 5 6 7<br>
-                8 9 10 11<br>
-                12 13 14 15<br>
-                but while coding I translated the pattern to fit my needs by inverting the rows and now the buttons are interpreted as:<br>
-                12 13 14 15<br>
-                8 9 10 11<br>
-                4 5 6 7<br>
-                0 1 2 3</p>
-
-                <p>The side toggle button exchanges back and forward between “play mode” and “menu mode”. <br>
-
-                    While in menu mode the front switch changes menus (“debug” menu, transcribe menu and midi channel menu) and the face buttons select the options.</p>
+    <!--NAVBAR-->
+    <div class="navbar">
+        <div class="box">
+            <a href="#spacer-intro">
+                <h1>Henrique Varela</h1>
+            </a>
+            <a class="hamburger-icon" href="#spacer-bio">
+                <div class="navbar-icon">
+                    <div class="inner1 inner-base"></div>
+                    <div class="inner2 inner-base"></div>
+                    <div class="inner3 inner-base"></div>
+                </div>
+            </a>
+        </div>
     </div>
-</div>
 
 
+    <!--INTRO SCREEN-->
+    <div class="spacer" id="spacer-intro"></div>
+
+    <div class="intro" id="intro">
+        <div class="container">
+            <h1><span id="pink-word">Midi16</span></h1>
+        </div>
+    </div>
+
+
+    <div class="main">
+        <div class="container">
+            <h1>Midi16</h1>
+    
+            <p>The Midi16 is a midi fighter inspired controller that I built after I got jump scared by the original controller’s price.
+                Material used in the project: 16 face arcade buttons, a side toggle button (from an old car radio), a front facing 2way temporary switch, a 3.5mm mono jack to use as a pedal input, a 128x64px monocolored OLED display (SSD1306), acrylic panels, some standoffs and screws, a USB type B to micro USB converter cable, an arduino pro micro, and a 16 channel multiplexer.</p>
+    
+                <h3>Links between boards/pieces:</h3>
+                <ul>
+                    <li>16ch mtpx S0 - pin 15</li>
+                    <li>16ch mtpx S1 - pin 14</li>
+                    <li>16ch mtpx S2 - pin 16</li>
+                    <li>16ch mtpx S3 - pin 10</li>
+                    <li>16ch mtpx Sig - pin 9</li>
+                    <li>Screen SCK - pin 3</li>
+                    <li>Screen SDA - pin 2</li>
+                    <li>Switch left - pin 4</li>
+                    <li>Switch right - pin 5</li>
+                    <li>Toggle button - pin 8</li>
+                    <li>Jack - pin 18</li>
+                </ul>
+    
+                <p>The face buttons connect to the multiplexer in the following manner:<br>
+                    0 1 2 3<br>
+                    4 5 6 7<br>
+                    8 9 10 11<br>
+                    12 13 14 15<br>
+                    but while coding I translated the pattern to fit my needs by inverting the rows and now the buttons are interpreted as:<br>
+                    12 13 14 15<br>
+                    8 9 10 11<br>
+                    4 5 6 7<br>
+                    0 1 2 3</p>
+    
+                    <p>The side toggle button exchanges back and forward between “play mode” and “menu mode”. <br>
+    
+                        While in menu mode the front switch changes menus (“debug” menu, transcribe menu and midi channel menu) and the face buttons select the options.</p>
+        </div>
+    </div>
+
+
+
+    <script src="scripts/main.js"></script>
 </body>
+
 </html>
